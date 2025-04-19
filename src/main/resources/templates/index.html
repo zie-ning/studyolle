@@ -6,6 +6,7 @@
     <div th:replace="fragments.html::main-nav"></div>
     <div class="alert alert-warning" role="alert" th:if="${account!=null && !account.emailVerified}">
         스터디올래 가입을 완료하려면 <a th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+<!--        todo: 계정 인증 이메일 확인 링크에 이메일을 확인하라는 문구와 이메일 다시 보내기 버튼이 있어야함(이메일 재전송)-->
     </div>
     <div class="container">
         <div class="py-5 text-center">

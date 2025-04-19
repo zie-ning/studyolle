@@ -5,12 +5,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +15,6 @@ import study.my_studyolle2.account.domain.Role;
 import study.my_studyolle2.account.dto.SignUpForm;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,13 +46,12 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account account) {
+    public void sendSignUpConfirmEmail(Account account) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(account.getEmail());
         mailMessage.setSubject("스터디올래, 회원 가입 인증"); //제목 설정
         mailMessage.setText("/check-email-token?token="+account.getEmailCheckToken()+
                 "&email="+account.getEmail());
-
         mailSender.send(mailMessage);
     }
 
@@ -70,29 +64,8 @@ public class AccountService {
         return count;
     }
 
-//    public void login(Account account) {
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(account.getNickname(),
-//                account.getPassword(),
-//                List.of(new SimpleGrantedAuthority("USER")));
-//
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        context.setAuthentication(token);
-//    }
-
-    public void login(String nickname, String rawPassword) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(nickname, rawPassword);
-        Authentication authentication = authenticationManager.authenticate(auth);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    public void loginWithoutPassword(Account account) {
-        UserDetails userDetails = User.builder()
-                .username(account.getNickname())
-                .password(account.getPassword()) //어짜피 null 처리됨
-                .authorities(Role.USER.name())
-                .build();
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new UserAccount(account), account.getPassword(), List.of(new SimpleGrantedAuthority(Role.USER.name())));
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments.html::head"></head>
+<body>
+<div th:replace="fragments.html::main-nav"></div>
+
+<div class="py-5 text-center" th:if="${account!=null && !account.emailVerified}">
+    <p class="lead">스터디올래 가입</p>
+    <h2 class="fw-bold">스터디올래 서비스를 사용하려면 인증 이메일을 확인하세요.</h2>
+    <div class="py-2"><small> 가입된 이메일: <span th:text="${account.email}"></span></small></div>
+    <a th:href="@{/resend-confirm-email}" class="btn btn-outline-info">인증 이메일 재전송</a>
+</div>
+
+<div class="py-5 text-center" th:if="${error==null && account!=null && account.emailVerified}">
+    <p class="lead">이미 이메일 인증이 완료된 계정입니다.</p>
+    <h2 class="fw-bold">
+        가입된 이메일: <span th:text="${account.email}"></span>
+    </h2>
+</div>
+
+<div class="py-5 text-center" th:if="${error!=null}">
+    <p class="lead">스터디올래 가입</p>
+    <div class="alert alert-danger" r ole="alert">
+        <div th:text="${error}"></div>
+    </div>
+</div>
+
+<div th:replace="fragments.html::footer"></div>
+</body>
+</html>

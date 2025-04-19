@@ -1,4 +1,4 @@
-package study.my_studyolle2.account.dto;
+package study.my_studyolle2.account;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import study.my_studyolle2.account.AccountRepository;
 import study.my_studyolle2.account.domain.Account;
 import study.my_studyolle2.account.domain.Role;
 

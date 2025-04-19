@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,8 +23,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf->csrf.disable())
+                .formLogin(Customizer.withDefaults())
+                .logout(Customizer.withDefaults())
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                        auth.requestMatchers("/", "/login", "/sign-up", "/check-email-token",
                                         "/email-login", "/check-email-login", "/login-link").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/profile/*").permitAll()
                                 .anyRequest().authenticated()

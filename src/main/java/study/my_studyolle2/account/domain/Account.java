@@ -26,6 +26,8 @@ public class Account {
 
     private String emailCheckToken;
 
+    private LocalDateTime emailCheckTokenSendLastTime;
+
     private LocalDateTime joinedAt;
 
     private String bio; //자기소개
@@ -57,9 +59,14 @@ public class Account {
 
     public void generateEmailCheckToken() {
         this.emailCheckToken= UUID.randomUUID().toString();
+        this.emailCheckTokenSendLastTime = LocalDateTime.now();
     }
 
     public boolean isValidToken(String token) {
         return this.getEmailCheckToken().equals(token);
+    }
+
+    public boolean canSendConfirmEmail(){
+        return this.emailCheckTokenSendLastTime.isBefore(LocalDateTime.now().minusHours(1));
     }
 }
